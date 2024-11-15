@@ -2,6 +2,7 @@ package com.example.simpleAuthentication_JWT_base_.controller;
 
 import com.example.simpleAuthentication_JWT_base_.model.*;
 import com.example.simpleAuthentication_JWT_base_.service.*;
+import org.springframework.security.crypto.password.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("login")
 public class LoginFormController {
     private final LoginFormService loginFormService;
+
 
     public LoginFormController(LoginFormService loginFormService) {
         this.loginFormService = loginFormService;
