@@ -22,11 +22,11 @@ import org.springframework.security.web.authentication.*;
 //@EnableMethodSecurity
 public class SecurityConfiguration {
     private final CustomUserDetailService customUserDetailService;
-    private final JwtTokenFilter jwtTokenFilter;
+//    private final JwtTokenFilter jwtTokenFilter;
 
-    public SecurityConfiguration(CustomUserDetailService customUserDetailService, JwtTokenFilter jwtTokenFilter) {
+    public SecurityConfiguration(CustomUserDetailService customUserDetailService) {
         this.customUserDetailService = customUserDetailService;
-        this.jwtTokenFilter = jwtTokenFilter;
+//        this.jwtTokenFilter = jwtTokenFilter;
     }
 
     @Bean
@@ -34,24 +34,15 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-//                    registry.requestMatchers("login/adduser").permitAll();
-                    registry.requestMatchers("login/authenticate").permitAll();
+                    registry.requestMatchers("login/authenticate","login/validate","login/adduser").permitAll();
                     registry.anyRequest().authenticated();
                 })
-//                .formLogin(httpSecurityFormLoginConfigurer -> {
-//                    httpSecurityFormLoginConfigurer.loginProcessingUrl("/api/login")
-//                            .defaultSuccessUrl("/login/home")
-//                            .permitAll();
+
+//                .sessionManagement(httpSecuritySessionManagementConfigurer -> {
+//                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //                })
-//                .logout(httpSecurityLogoutConfigurer -> {
-//                    httpSecurityLogoutConfigurer.logoutUrl("/api/logout");
-//
-//                })
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> {
-                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+//                .authenticationProvider(authenticationProvider())
+//                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .build();
     }

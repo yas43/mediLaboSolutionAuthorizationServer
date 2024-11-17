@@ -25,25 +25,6 @@ public class LoginFormController {
         this.authenticationManager = authenticationManager;
     }
 
-    @GetMapping("/home")
-    public String home(Model model){
-
-//        Authentication authentication1 = SecurityContextHolder.getContext().getAuthentication();
-//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginFormService.getConnectedUser().getUsername()
-//        ,loginFormService.getConnectedUser().getPassword()));
-
-//        if (authentication1.isAuthenticated()){
-//            System.out.println("token is "+ jwtService.generateToken(loginFormService.getConnectedUser().getUsername()));
-//            model.addAttribute("username",loginFormService.getConnectedUser().getUsername());
-//            model.addAttribute("token",jwtService.generateToken(loginFormService.getConnectedUser().getUsername()));
-////            return "home";
-//        }
-//        else {
-//            throw new UsernameNotFoundException("user not founded");
-//        }
-        return "home";
-    }
-
     @PostMapping("/authenticate")
     public String authenticate(@RequestBody LoginForm loginForm){
         Authentication authentication = authenticationManager.authenticate
@@ -61,5 +42,11 @@ public class LoginFormController {
     @PostMapping("/adduser")
     public LoginForm addUser(@RequestBody LoginForm loginForm){
         return loginFormService.userRegistry(loginForm);
+    }
+
+    @GetMapping("/validate")
+    public String validToken(@RequestParam("token")String token){
+         jwtService.validateToken(token);
+         return "token is valid";
     }
 }
