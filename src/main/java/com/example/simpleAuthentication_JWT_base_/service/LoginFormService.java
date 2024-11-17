@@ -2,6 +2,9 @@ package com.example.simpleAuthentication_JWT_base_.service;
 
 import com.example.simpleAuthentication_JWT_base_.model.*;
 import com.example.simpleAuthentication_JWT_base_.repository.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.context.*;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
@@ -19,5 +22,16 @@ public class LoginFormService {
         actualLoginForm.setUsername(loginForm.getUsername());
         actualLoginForm.setPassword(passwordEncoder.encode(loginForm.getPassword()));
        return loginFormRepository.save(actualLoginForm);
+    }
+
+    public LoginForm getConnectedUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principle = authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) principle;
+        LoginForm user = loginFormRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()->new UsernameNotFoundException("user did not find"));
+//        System.out.println("hello this is current user username "+user.getUsername());
+        return user;
+
     }
 }
