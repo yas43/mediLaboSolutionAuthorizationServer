@@ -2,6 +2,8 @@ package com.example.simpleAuthentication_JWT_base_.controller;
 
 import com.example.simpleAuthentication_JWT_base_.model.*;
 import com.example.simpleAuthentication_JWT_base_.service.*;
+import jakarta.servlet.http.*;
+import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
@@ -26,17 +28,21 @@ public class LoginFormController {
     }
 
     @PostMapping("/authenticate")
-    public String authenticate(@RequestBody LoginForm loginForm){
+    public ResponseEntity<?> authenticate(@RequestBody LoginForm loginForm, HttpServletResponse response){
+        System.out.println("we are in authorization server ");
         Authentication authentication = authenticationManager.authenticate
                 (new UsernamePasswordAuthenticationToken(loginForm.getUsername()
                         ,loginForm.getPassword()));
         if (authentication.isAuthenticated()){
-            return jwtService.generateToken(loginForm.getUsername());
+            System.out.println("we are in authorization server user authenticated");
+            String token = jwtService.generateToken(authentication);
+            ResponseEntity<String> response1 = ResponseEntity.ok(token);
+            System.out.println(" generated token is "+token);
+            return response1;
         }
-        else {
-            throw new UsernameNotFoundException("user not founded");
 
-        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid credential");
+
     }
 
     @PostMapping("/adduser")
@@ -45,8 +51,17 @@ public class LoginFormController {
     }
 
     @GetMapping("/validate")
-    public String validToken(@RequestParam("token")String token){
-         jwtService.validateToken(token);
-         return "token is valid";
+    public ResponseEntity<?> validToken(@RequestParam("token")String token){
+        try {
+            jwtService.validateToken(token);
+            return ResponseEntity.ok("Valid");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid");
+        }
+    }
+
+    @GetMapping("/findUsername")
+    public LoginForm findLoginForm(@RequestParam("username")String username){
+        return loginFormService.findLoginForm(username);
     }
 }

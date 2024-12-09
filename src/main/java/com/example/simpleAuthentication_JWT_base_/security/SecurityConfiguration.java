@@ -34,13 +34,13 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("login/authenticate","login/validate","login/adduser").permitAll();
+                    registry.requestMatchers("login/authenticate","login/validate","login/adduser","login/findUsername").permitAll();
                     registry.anyRequest().authenticated();
                 })
 
-//                .sessionManagement(httpSecuritySessionManagementConfigurer -> {
-//                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//                })
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> {
+                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
 //                .authenticationProvider(authenticationProvider())
 //                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 

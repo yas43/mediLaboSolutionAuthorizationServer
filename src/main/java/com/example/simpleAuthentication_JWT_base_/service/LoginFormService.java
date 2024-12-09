@@ -34,4 +34,11 @@ public class LoginFormService {
         return user;
 
     }
+
+
+    public LoginForm findLoginForm(String username) {
+        LoginForm loginForm = loginFormRepository.findByUsername(username)
+                .orElseThrow(()->new UsernameNotFoundException("no login form by this username "));
+        return loginForm;
+    }
 }
