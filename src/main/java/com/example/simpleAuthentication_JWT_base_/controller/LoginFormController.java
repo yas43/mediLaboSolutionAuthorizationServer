@@ -64,4 +64,15 @@ public class LoginFormController {
     public LoginForm findLoginForm(@RequestParam("username")String username){
         return loginFormService.findLoginForm(username);
     }
+
+    @GetMapping("/getUsernameByToken")
+    public ResponseEntity<String> getUsernameByToken(@RequestParam("token")String token){
+        try {
+            String username = jwtService.getUsername(token);
+            return ResponseEntity.ok(username);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid token"+e.getMessage());
+        }
+
+    }
 }

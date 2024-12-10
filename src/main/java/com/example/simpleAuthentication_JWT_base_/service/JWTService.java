@@ -44,6 +44,12 @@ public class JWTService {
     }
 
 
+
+    public String getUsername(String token) {
+        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody().getSubject();
+    }
+
+
 //    public void validateToken(final String token) {
 //        Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
 //    }
