@@ -19,14 +19,14 @@ import org.springframework.security.web.authentication.*;
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
+
 public class SecurityConfiguration {
     private final CustomUserDetailService customUserDetailService;
-//    private final JwtTokenFilter jwtTokenFilter;
+
 
     public SecurityConfiguration(CustomUserDetailService customUserDetailService) {
         this.customUserDetailService = customUserDetailService;
-//        this.jwtTokenFilter = jwtTokenFilter;
+
     }
 
     @Bean
@@ -41,8 +41,7 @@ public class SecurityConfiguration {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> {
                     httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
-//                .authenticationProvider(authenticationProvider())
-//                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+
 
                 .build();
     }

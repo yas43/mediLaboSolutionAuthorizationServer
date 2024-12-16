@@ -30,7 +30,6 @@ public class LoginFormService {
         UserDetails userDetails = (UserDetails) principle;
         LoginForm user = loginFormRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(()->new UsernameNotFoundException("user did not find"));
-//        System.out.println("hello this is current user username "+user.getUsername());
         return user;
 
     }
